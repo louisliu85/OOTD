@@ -206,7 +206,7 @@
             // =========================================================
             // 👇 填寫 Google Sheets 發布為 CSV 的網址 👇
             // =========================================================
-            const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR14WxdTycKfRM64qq13BxMrMH7OUOONQFhvr2StbozuNBcwulMwyb9H2Q3_nX9DoKvk4DCDGY5E8x-/pub?gid=0&single=true&output=csv"; 
+            const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR14WxdTycKfRM64qq13BxMrMH7OUOONQFhvr2StbozuNBcwulMwyb9H2Q3_nX9DoKvk4DCDGY5E8x-/pub?output=csv"; 
             const LOOKBOOK_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR14WxdTycKfRM64qq13BxMrMH7OUOONQFhvr2StbozuNBcwulMwyb9H2Q3_nX9DoKvk4DCDGY5E8x-/pub?gid=378637456&single=true&output=csv"; 
 
             const [dbData, setDbData] = useState(null);
@@ -888,54 +888,56 @@
                     <div className="h-[100dvh] bg-gray-50 flex justify-center overflow-hidden relative">
                         {toast && <div className="fixed top-14 left-1/2 transform -translate-x-1/2 z-50 toast-enter bg-gray-900 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-xl">{toast}</div>}
                         
-                        {/* 💡 終極解法：放在手機框內使用 absolute，並替換為專屬的 modal-enter 動畫 */}
-                        {isFilterModalOpen && (
-                            <div className="absolute inset-0 z-[100] flex flex-col justify-end bg-black/60 backdrop-blur-[2px] transition-all overflow-hidden">
-                                <div className="w-full bg-white rounded-t-3xl p-5 shadow-2xl modal-enter max-h-[85vh] flex flex-col">
-                                    <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-3 flex-shrink-0">
-                                        <h3 className="text-sm font-black text-gray-800 flex items-center">
-                                            <FilterIcon /> <span className="ml-1.5">進階篩選</span>
-                                        </h3>
-                                        <button onClick={() => setIsFilterModalOpen(false)} className="p-1 text-gray-400 hover:text-red-500 transition-colors"><XIcon /></button>
-                                    </div>
-                                    
-                                    <div className="mb-6 overflow-y-auto no-scrollbar">
-                                        <label className="text-xs font-bold text-gray-500 mb-3 block">裝備對象 (三格全亮即為全選)</label>
-                                        
-                                        {/* 移除混合選項，改為 3 等分的網格排版 */}
-                                        <div className="grid grid-cols-3 gap-2">
-                                            <button 
-                                                onClick={() => {
-                                                    if(tempGenders.includes('men') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'men'));
-                                                    else if(!tempGenders.includes('men')) setTempGenders([...tempGenders, 'men']);
-                                                }}
-                                                className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('men') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
-                                            >👦 男款</button>
-                                            <button 
-                                                onClick={() => {
-                                                    if(tempGenders.includes('women') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'women'));
-                                                    else if(!tempGenders.includes('women')) setTempGenders([...tempGenders, 'women']);
-                                                }}
-                                                className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('women') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
-                                            >👧 女款</button>
-                                            <button 
-                                                onClick={() => {
-                                                    if(tempGenders.includes('kids') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'kids'));
-                                                    else if(!tempGenders.includes('kids')) setTempGenders([...tempGenders, 'kids']);
-                                                }}
-                                                className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('kids') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
-                                            >👶 兒童</button>
+                        {/* 💡 修正：在外層容器加上 overflow-hidden，並把 Modal 真正放進手機框內 */}
+                        <div className="w-full max-w-md bg-gray-50 h-full shadow-2xl relative flex flex-col overflow-hidden">
+                            
+                            {/* 彈出式篩選視窗 Modal */}
+                            {isFilterModalOpen && (
+                                <div className="absolute inset-0 z-[100] flex flex-col justify-end bg-black/60 backdrop-blur-[2px] transition-all">
+                                    <div className="w-full bg-white rounded-t-3xl p-5 shadow-2xl modal-enter max-h-[85vh] flex flex-col">
+                                        <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-3 flex-shrink-0">
+                                            <h3 className="text-sm font-black text-gray-800 flex items-center">
+                                                <FilterIcon /> <span className="ml-1.5">進階篩選</span>
+                                            </h3>
+                                            <button onClick={() => setIsFilterModalOpen(false)} className="p-1 text-gray-400 hover:text-red-500 transition-colors"><XIcon /></button>
                                         </div>
+                                        
+                                        <div className="mb-6 overflow-y-auto no-scrollbar">
+                                            <label className="text-xs font-bold text-gray-500 mb-3 block">裝備對象（可複選）</label>
+                                            
+                                            {/* 移除混合選項，改為 3 等分的網格排版 */}
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <button 
+                                                    onClick={() => {
+                                                        if(tempGenders.includes('men') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'men'));
+                                                        else if(!tempGenders.includes('men')) setTempGenders([...tempGenders, 'men']);
+                                                    }}
+                                                    className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('men') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
+                                                >👦 男款</button>
+                                                <button 
+                                                    onClick={() => {
+                                                        if(tempGenders.includes('women') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'women'));
+                                                        else if(!tempGenders.includes('women')) setTempGenders([...tempGenders, 'women']);
+                                                    }}
+                                                    className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('women') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
+                                                >👧 女款</button>
+                                                <button 
+                                                    onClick={() => {
+                                                        if(tempGenders.includes('kids') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'kids'));
+                                                        else if(!tempGenders.includes('kids')) setTempGenders([...tempGenders, 'kids']);
+                                                    }}
+                                                    className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('kids') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
+                                                >👶 兒童</button>
+                                            </div>
+                                        </div>
+
+                                        <button onClick={applyCatalogFilter} className="w-full py-4 bg-blue-600 text-white rounded-xl font-black text-sm tracking-widest uppercase hover:bg-blue-700 active:scale-95 transition-all shadow-lg flex-shrink-0">
+                                            套用篩選條件
+                                        </button>
                                     </div>
-
-                                    <button onClick={applyCatalogFilter} className="w-full py-4 bg-blue-600 text-white rounded-xl font-black text-sm tracking-widest uppercase hover:bg-blue-700 active:scale-95 transition-all shadow-lg flex-shrink-0">
-                                        套用篩選條件
-                                    </button>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        <div className="w-full max-w-md bg-gray-50 h-full shadow-2xl relative flex flex-col">
                             {/* Header 包含篩選按鈕 */}
                             <div className="bg-white shadow-sm z-20 flex-shrink-0 border-b border-gray-200">
                                 <div className="px-3 py-2 flex justify-between items-center">
@@ -943,7 +945,7 @@
                                         <ArrowLeftIcon />
                                     </button>
                                     <div className="text-center w-full">
-                                        <h1 className="text-xs font-black text-gray-800 tracking-widest uppercase">裝備總覽清單</h1>
+                                        <h1 className="text-xs font-black text-gray-800 tracking-widest uppercase">裝備型錄</h1>
                                         <p className="text-[8px] text-blue-600 font-bold mt-0.5 tracking-widest">
                                             {/* 當 3 個選項都選取時，顯示「全部對象」 */}
                                             {catalogGenders.length === 3 ? '全部對象' : catalogGenders.map(g => g === 'men' ? '男' : g === 'women' ? '女' : '兒童').join(' / ')}
