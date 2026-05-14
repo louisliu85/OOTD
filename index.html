@@ -17,7 +17,7 @@
             theme: {
                 extend: {
                     fontFamily: { 
-                        // 貨號與名稱維持此順序
+                        // 貨號與名稱優先使用 Inter
                         sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
                         // 價格優先使用 Decathlon VF
                         price: ['"Decathlon VF"', 'Inter', 'Noto Sans TC', 'sans-serif']
@@ -44,13 +44,14 @@
     <style>
         @font-face {
             font-family: "Decathlon VF";
+            /* 填入您的字體路徑 */
             src: url("https://www.decathlon.tw/fonts/Decathlon-VF.woff2") format("woff2");
             font-weight: 100 900;
             font-style: normal;
             font-display: swap;
         }
 
-        /* 已移除 fade-in 淡入動畫 */
+        /* 核心互動動畫 */
         @keyframes verticalBlurSpin {
             0% { filter: blur(0px); transform: translateY(0); }
             25% { filter: blur(2px); transform: translateY(-10px); opacity: 0.8;}
@@ -140,12 +141,12 @@
 
             const handlePrev = (e) => {
                 if (e) e.stopPropagation(); 
-                if (isSpinning || isLocked || !currentItem) return;
+                if (isSpinning || !items || items.length === 0) return;
                 onSelect(selectedIndex === 0 ? items.length - 1 : selectedIndex - 1);
             };
             const handleNext = (e) => {
                 if (e) e.stopPropagation();
-                if (isSpinning || isLocked || !currentItem) return;
+                if (isSpinning || !items || items.length === 0) return;
                 onSelect(selectedIndex === items.length - 1 ? 0 : selectedIndex + 1);
             };
 
@@ -165,7 +166,7 @@
                                     onError={(e) => { e.target.src = 'https://placehold.co/400x400/eeeeee/999999?text=無圖片'; }} 
                                     className={`w-full h-full object-cover mix-blend-multiply transition-all ${isSpinning && !isLocked ? 'spinning-effect opacity-60' : 'opacity-100'}`} 
                                 />
-                                {!isSpinning && !isLocked && !isPresetItem && (
+                                {!isSpinning && !isLocked && (
                                     <React.Fragment>
                                         <button onClick={handlePrev} className={`absolute left-1 w-5 h-5 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-sm text-gray-600 transition-all duration-500 ${navVisible ? 'opacity-90' : 'opacity-0 pointer-events-none'}`}><ChevronLeftIcon /></button>
                                         <button onClick={handleNext} className={`absolute right-1 w-5 h-5 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-sm text-gray-600 transition-all duration-500 ${navVisible ? 'opacity-90' : 'opacity-0 pointer-events-none'}`}><ChevronRightIcon /></button>
@@ -193,22 +194,21 @@
                                 </span>
                                 <span className="text-[9px] text-gray-400 font-sans truncate">{currentItem?.id || '----'}</span>
                             </div>
-                            {/* 💡 修正：移除 disabled 中的 isPresetItem，讓所有加入的商品都能手動解除鎖定 */}
                             <button onClick={onToggleLock} disabled={isSpinning || !currentItem} className={`p-1 -mr-1 rounded-full transition-colors flex-shrink-0 focus:outline-none ${isLocked ? 'text-orange-500 bg-orange-50' : 'text-gray-400 hover:bg-gray-100'} disabled:opacity-50`} title="鎖定/解除鎖定">
                                 {isLocked ? <LockIcon /> : <UnlockIcon />}
                             </button>
                         </div>
 
-                        <div className="mb-0.5">
+                        <div className="mb-0.5 ml-1.5">
                             <h4 className="text-[11px] font-bold text-gray-800 line-clamp-2 leading-snug">{currentItem?.name || '---'}</h4>
                         </div>
 
-                        <div className="flex justify-between items-end mt-0.5">
+                        <div className="flex justify-between items-end mt-0.5 ml-1.5">
                             {currentItem?.isOwned ? (
                                 <span className="text-[11px] font-black text-gray-400 font-sans tracking-tighter">免算錢</span>
                             ) : (
                                 <span className={`text-[14px] font-black font-price tracking-tighter leading-none ${currentItem?.isCart ? 'text-amber-600' : 'text-gray-900'}`}>
-                                    ${currentItem?.price?.toLocaleString() || '0'}
+                                    ${(currentItem?.price || 0).toLocaleString()}
                                 </span>
                             )}
                             {currentItem?.id && (
@@ -246,7 +246,6 @@
             const [scenario, setScenario] = useState('all');
             
             const [targetGender, setTargetGender] = useState('all');
-            const [tempGenders, setTempGenders] = useState(['men', 'women', 'kids']);
             const [catalogGenders, setCatalogGenders] = useState(['men', 'women', 'kids']);
             const [catalogScenario, setCatalogScenario] = useState('all');
             const [presetItems, setPresetItems] = useState([]); 
@@ -382,7 +381,6 @@
 
             const handleRemovePreset = (id) => setPresetItems(presetItems.filter(i => i.id !== id));
 
-            // 優化後的篩選邏輯
             const generateFilteredDb = useCallback((currentScenario, genderCondition, currentPresetItems = presetItems) => {
                 if (!dbData) return null;
                 const scenarioKeywords = {
@@ -541,10 +539,8 @@
             };
 
             const returnToSlot = (newLocks = null, newSelections = null) => {
-                const currentLocks = newLocks || locked;
-                const currentSelections = newSelections || selections;
-                if (newLocks) setLocked(currentLocks);
-                if (newSelections) setSelections(currentSelections);
+                if (newLocks) setLocked(newLocks);
+                if (newSelections) setSelections(newSelections);
                 setView('slot');
             };
 
@@ -553,14 +549,10 @@
                 return generateFilteredDb(catalogScenario, catalogGenders, []); 
             }, [dbData, catalogScenario, catalogGenders, generateFilteredDb]);
 
-            const getProductInfo = (id) => {
+            const getProductInfo = useCallback((id) => {
                 if (!dbData) return null;
-                for (const cat of categoryOrder) {
-                    const found = dbData[cat]?.find(item => item.id === id);
-                    if (found) return found;
-                }
-                return null; 
-            };
+                return Object.values(dbData).flat().find(item => item.id === id);
+            }, [dbData]);
 
             // --- 底部 App 導覽列組件 ---
             const BottomNav = () => (
@@ -635,18 +627,18 @@
                                             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">此穿搭包含以下商品：</h3>
                                             <div className="flex space-x-3 overflow-x-auto no-scrollbar pb-2 pr-4 snap-x">
                                                 {look.productIds.map(productId => {
-                                                    const itemInfo = getProductInfo(productId);
-                                                    if (!itemInfo) return null; 
+                                                    const item = getProductInfo(productId);
+                                                    if (!item) return null; 
                                                     return (
                                                         <div key={productId} className="flex-shrink-0 w-32 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col snap-start">
                                                             <div className="w-full aspect-square bg-gray-50 relative flex items-center justify-center overflow-hidden">
-                                                                <img src={itemInfo.img} className="w-full h-[100%] object-contain mix-blend-multiply" onError={(e) => { e.target.src = 'https://placehold.co/400x400/eeeeee/999999?text=無圖片'; }} />
+                                                                <img src={item.img} className="w-full h-[100%] object-contain mix-blend-multiply" onError={(e) => { e.target.src = 'https://placehold.co/400x400/eeeeee/999999?text=無圖片'; }} />
                                                             </div>
                                                             <div className="p-2.5 flex flex-col flex-1 border-t border-gray-50">
-                                                                <h4 className="text-[11px] font-bold text-gray-800 line-clamp-2 leading-snug mb-0.5">{itemInfo.name}</h4>
-                                                                <p className="text-[9px] text-gray-400 font-sans mb-1">{itemInfo.id}</p>
-                                                                <p className="text-[13px] font-black text-gray-900 font-sans tracking-tighter mb-2">${itemInfo.price.toLocaleString()}</p>
-                                                                <a href={`https://www.decathlon.tw/${itemInfo.id}/1769`} target="_blank" rel="noopener noreferrer" className="mt-auto block text-center text-[10px] bg-gray-100 text-gray-600 hover:bg-blue-600 hover:text-white py-1.5 rounded-md font-bold transition-colors focus:outline-none">
+                                                                <h4 className="text-[11px] font-bold text-gray-800 line-clamp-2 leading-snug mb-0.5">{item.name}</h4>
+                                                                <p className="text-[9px] text-gray-400 font-sans mb-1">{item.id}</p>
+                                                                <p className="text-[13px] font-black text-gray-900 font-price tracking-tighter mb-2">${(item.price || 0).toLocaleString()}</p>
+                                                                <a href={`https://www.decathlon.tw/${item.id}/1769`} target="_blank" rel="noopener noreferrer" className="mt-auto block text-center text-[10px] bg-gray-100 text-gray-600 hover:bg-blue-600 hover:text-white py-1.5 rounded-md font-bold transition-colors focus:outline-none">
                                                                     查看商品詳情
                                                                 </a>
                                                             </div>
@@ -706,7 +698,7 @@
                                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                                     <h2 className="text-[11px] font-bold text-gray-800 mb-2 flex justify-between items-end">
                                         <span className="flex items-center"><span className="w-1 h-2.5 bg-blue-600 rounded-full mr-1.5"></span>新購裝備預算</span>
-                                        <span className="text-blue-600 font-sans font-black text-sm">${budget.toLocaleString()}</span>
+                                        <span className="text-blue-600 font-price font-black text-sm">${budget.toLocaleString()}</span>
                                     </h2>
                                     <input type="range" min="500" max="50000" step="100" value={budget} onChange={(e) => setBudget(Number(e.target.value))} className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none" />
                                     <div className="flex justify-between text-[9px] text-gray-400 mt-1.5 font-sans"><span>$500</span><span>$50,000</span></div>
@@ -761,7 +753,7 @@
                                                 {categoryOrder.map(cat => <option key={cat} value={cat}>{categoryLabels[cat]}</option>)}
                                             </select>
                                             <input type="number" value={presetInputId} onChange={(e)=>setPresetInputId(e.target.value)} placeholder="輸入貨號，如無請輸入任意數字替代" className="flex-1 bg-white border border-gray-300 rounded-lg px-2 py-1 text-[10px] focus:outline-none" />
-                                            <button type="submit" className="bg-gray-800 text-white px-3 rounded-lg text-[10px] font-bold hover:bg-gray-900 transition-colors focus:outline-none">加入</button>
+                                            <button type="submit" className="bg-blue-600 text-white px-3 rounded-lg text-[10px] font-bold hover:bg-blue-800 transition-colors focus:outline-none">加入</button>
                                         </div>
                                     </form>
 
@@ -864,7 +856,10 @@
                                     <div className="text-center w-full">
                                         <h1 className="text-sm font-black text-gray-800 tracking-widest uppercase">全品項裝備型錄</h1>
                                         <p className="text-[10px] text-blue-600 font-bold mt-0.5 tracking-widest">
-                                            {catalogScenario === 'all' ? '通用' : scenarioTips[catalogScenario].title.split(' ')[1].split('【')[0]} | {catalogGenders.length === 3 ? '全部對象' : catalogGenders.map(g => g === 'men' ? '男' : g === 'women' ? '女' : '兒童').join('/')}
+                                            {catalogScenario === 'all' ? '通用' : scenarioTips[catalogScenario].title.split(' ')[1].split('【')[0]} | {catalogGenders.length === 3 ? '全部對象' : catalogGenders.map(g => g === 'men' ? '男' : g === 'women' ? '女' : '兒童').sort((a,b) => {
+                                                const order = {'men': 0, 'women': 1, 'kids': 2};
+                                                return order[a] - order[b];
+                                            }).join('/')}
                                         </p>
                                     </div>
                                     <button onClick={() => setIsFilterModalOpen(true)} className="p-1.5 -mr-1 rounded-full text-gray-500 bg-gray-100 hover:bg-blue-100 hover:text-blue-600 transition-colors focus:outline-none" title="進階篩選">
@@ -903,7 +898,7 @@
                                                         <div className="p-2.5 flex flex-col flex-1 bg-white">
                                                             <h4 className="text-[11px] font-bold text-gray-800 line-clamp-2 leading-snug mb-0.5">{item.name}</h4>
                                                             <p className="text-[9px] text-gray-400 font-sans mb-1">{item.id}</p>
-                                                            <p className="text-[13px] font-black text-gray-800 font-price mb-2">${item.price.toLocaleString()}</p>
+                                                            <p className="text-[13px] font-black text-gray-800 font-price mb-2">${(item.price || 0).toLocaleString()}</p>
                                                             <button 
                                                                 onClick={() => {
                                                                     let currentDb = filteredDb || generateFilteredDb(scenario, targetGender);
