@@ -71,17 +71,31 @@
         const categoryLabels = { hat: "帽子", top: "衣服", bottom: "褲子", shoes: "鞋子", accessory: "配件" };
         const categoryOrder = ["hat", "top", "bottom", "shoes", "accessory"];
 
+        // --- 穿搭情境知識庫 ---
+        const scenarioTips = {
+            all: { title: "🌍 綜合通用", text: "依據日常或輕度戶外活動，挑選舒適、好活動且具備基礎機能的服飾。" },
+            trekking: { title: "🥾 登山健行【洋蔥式穿法】", text: "山區氣候多變，強烈建議採用洋蔥式穿法：\n1. 內層：吸濕排汗 (保持身體乾爽)\n2. 中層：刷毛或羽絨 (維持體溫)\n3. 外層：防風防水 (抵禦風雨變化)" },
+            baiyue: { title: "⛰️ 百岳重裝【洋蔥式穿法】", text: "因應氣候變化，請嚴格遵守：\n1. 內層：吸濕排汗 (保持身體乾爽)\n2. 中層：刷毛或羽絨 (維持體溫)\n3. 外層：防風防水 (抵禦風雨變化)。\n頭部保暖與高筒專業登山鞋絕對不可少！" },
+            hiking: { title: "🚶 徒步旅行", text: "長時間平地或緩坡徒步，首重透氣排汗與足部舒適支撐，建議選擇輕量化、防曬抗 UV 的裝備。" },
+            island: { title: "🧳 徒步環島", text: "長途跋涉首重雙腳與雙肩！登山鞋與登山包可減輕身體負擔；衣著則建議吸濕排汗材質為主，並攜帶輕便易收納的雨衣，應付長時間日曬與多變天候。" },
+            winter: { title: "❄️ 冬季保暖", text: "低溫防寒必備！內層挑選美麗諾羊毛或保暖底層，搭配羽絨中層與防風外層，並注意頭部與四肢的保暖。" }
+        };
+
         // --- Icons ---
         const LockIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>;
         const UnlockIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>;
         const ChevronLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>;
         const ChevronRightIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>;
-        const DicesIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle><circle cx="15.5" cy="8.5" r="1.5"></circle><circle cx="8.5" cy="15.5" r="1.5"></circle></svg>;
+        const DicesIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle><circle cx="15.5" cy="8.5" r="1.5"></circle><circle cx="8.5" cy="15.5" r="1.5"></circle></svg>;
         const XIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
         const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>;
         const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>;
-        const ListIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>;
         const FilterIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>;
+        const ListIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>;
+        
+        // 底部導覽列 Icons
+        const BookOpenIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>;
+        const GridIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>;
 
         const ToggleBtn = ({ active, onClick, className = "", children }) => (
             <button type="button" onClick={onClick} className={`py-1.5 px-2 rounded-lg text-[11px] font-bold border-2 transition-all flex items-center justify-center space-x-1 ${active ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 bg-white text-gray-500 hover:border-blue-300'} ${className}`}>
@@ -89,7 +103,7 @@
             </button>
         );
 
-        // --- 拉霸機卡片組件 ---
+        // --- 卡片組件 ---
         const SlotItem = ({ category, items, selectedIndex, isLocked, isSpinning, onSelect, onToggleLock }) => {
             const currentItem = items[selectedIndex];
             const isPresetItem = currentItem?.isOwned || currentItem?.isCart;
@@ -100,12 +114,18 @@
             const showNavTemporarily = () => {
                 setNavVisible(true);
                 if (timerRef.current) clearTimeout(timerRef.current);
-                timerRef.current = setTimeout(() => setNavVisible(false), 3000);
+                timerRef.current = setTimeout(() => {
+                    setNavVisible(false);
+                }, 3000);
             };
 
             useEffect(() => {
-                if (!isSpinning && !isLocked && !isPresetItem) showNavTemporarily();
-                else { setNavVisible(false); if (timerRef.current) clearTimeout(timerRef.current); }
+                if (!isSpinning && !isLocked && !isPresetItem) {
+                    showNavTemporarily();
+                } else {
+                    setNavVisible(false);
+                    if (timerRef.current) clearTimeout(timerRef.current);
+                }
                 return () => clearTimeout(timerRef.current);
             }, [isSpinning, isLocked, isPresetItem, selectedIndex]);
 
@@ -123,7 +143,7 @@
             return (
                 <div className={`flex-1 min-h-0 max-h-[120px] flex bg-white rounded-xl shadow-sm border-2 transition-colors overflow-hidden ${isLocked ? (currentItem?.isOwned ? 'border-gray-300 bg-gray-50' : currentItem?.isCart ? 'border-amber-400 bg-amber-50' : 'border-orange-400 bg-orange-50') : 'border-transparent hover:border-blue-200'}`}>
                     
-                    {/* 左側：拉霸機圖片 (調整為 100% 完美比例) */}
+                    {/* 左側：拉霸機圖片 */}
                     <div 
                         className="h-full aspect-square relative bg-gray-100 flex-shrink-0 flex items-center justify-center border-r border-gray-100 cursor-pointer overflow-hidden"
                         onClick={showNavTemporarily}
@@ -143,14 +163,10 @@
                                     </React.Fragment>
                                 )}
                                 {currentItem.isOwned && (
-                                    <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-[1px] flex flex-col items-center justify-center">
-                                        <span className="bg-gray-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-lg border border-white/30">✅ 已擁有（免計價）</span>
-                                    </div>
+                                    <div className="absolute inset-0 bg-gray-900/50 flex items-center justify-center text-white text-[10px] font-bold backdrop-blur-[1px]">✅ 已擁有</div>
                                 )}
                                 {currentItem.isCart && (
-                                    <div className="absolute inset-0 bg-amber-900/20 backdrop-blur-[1px] flex flex-col items-center justify-center">
-                                        <span className="bg-amber-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-lg border border-white/50">🛒 購物車（需計價）</span>
-                                    </div>
+                                    <div className="absolute inset-0 bg-amber-900/30 flex items-center justify-center text-white text-[10px] font-bold backdrop-blur-[1px]">🛒 購物車</div>
                                 )}
                                 {!isPresetItem && <div className={`absolute bottom-0.5 right-0.5 bg-black/50 text-white text-[7px] px-1 py-0.5 rounded transition-opacity duration-500 ${navVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>{selectedIndex + 1}/{items.length}</div>}
                             </React.Fragment>
@@ -191,7 +207,7 @@
                                     rel="noopener noreferrer" 
                                     className="text-[9px] bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-600 hover:text-white px-1.5 py-0.5 rounded transition-colors flex items-center space-x-0.5 whitespace-nowrap"
                                 >
-                                    <span>前往官網</span>
+                                    <span>官網連結</span>
                                     <ExternalLinkIcon />
                                 </a>
                             )}
@@ -221,12 +237,13 @@
             const [budget, setBudget] = useState(4000); 
             const [scenario, setScenario] = useState('all');
             
-            // 拉霸機與設定頁：單選
             const [targetGender, setTargetGender] = useState('all');
-            
-            // 型錄專用：支援複選狀態，預設全選
             const [tempGenders, setTempGenders] = useState(['men', 'women', 'kids']);
             const [catalogGenders, setCatalogGenders] = useState(['men', 'women', 'kids']);
+            
+            // 💡 新增：型錄專用的情境狀態
+            const [catalogScenario, setCatalogScenario] = useState('all');
+            const [tempScenario, setTempScenario] = useState('all');
             
             const [presetItems, setPresetItems] = useState([]); 
             const [presetInputCat, setPresetInputCat] = useState('top');
@@ -240,11 +257,9 @@
             const [spinningStates, setSpinningStates] = useState({ hat: false, top: false, bottom: false, shoes: false, accessory: false });
             const [isOverBudget, setIsOverBudget] = useState(false);
             
-            // 型錄專用狀態
             const [catalogActiveTab, setCatalogActiveTab] = useState('all');
             const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
-            // 初始化：讀取資料庫
             useEffect(() => {
                 if (!GOOGLE_SHEET_CSV_URL) {
                     setDbFatalError(true);
@@ -262,16 +277,13 @@
                                 let fetchedDate = ''; 
                                 
                                 results.data.forEach(row => {
-                                    if (!fetchedDate && row.date && row.date.trim() !== '') {
-                                        fetchedDate = row.date.trim();
-                                    }
+                                    if (!fetchedDate && row.date && row.date.trim() !== '') fetchedDate = row.date.trim();
 
                                     const cat = row.category?.trim().toLowerCase();
                                     if (row.id && cat && parsedData[cat]) {
                                         const n = row.name?.trim() || "未命名商品";
                                         let itemGender = '中性';
                                         if (row.gender && row.gender.trim() !== '') itemGender = row.gender.trim();
-
                                         let itemLabels = row.label && row.label.trim() !== '' ? row.label.trim() : '';
 
                                         parsedData[cat].push({
@@ -301,10 +313,7 @@
                 });
 
                 const fetchLookbook = new Promise((resolve, reject) => {
-                    if (!LOOKBOOK_CSV_URL) {
-                        reject(new Error("未提供雜誌資料庫網址"));
-                        return;
-                    }
+                    if (!LOOKBOOK_CSV_URL) { reject(new Error("未提供雜誌網址")); return; }
                     Papa.parse(LOOKBOOK_CSV_URL, {
                         download: true,
                         header: true,
@@ -329,9 +338,7 @@
                                 } else {
                                     reject(new Error("雜誌資料庫無有效資料"));
                                 }
-                            } catch (err) {
-                                reject(err);
-                            }
+                            } catch (err) { reject(err); }
                         },
                         error: (err) => reject(err)
                     });
@@ -340,7 +347,7 @@
                 Promise.all([fetchDatabase, fetchLookbook])
                     .then(() => setIsDbLoading(false))
                     .catch(err => {
-                        console.error("資料庫載入發生致命錯誤：", err);
+                        console.error("載入發生致命錯誤：", err);
                         setDbFatalError(true);
                         setIsDbLoading(false);
                     });
@@ -371,12 +378,12 @@
 
             const handleRemovePreset = (id) => setPresetItems(presetItems.filter(i => i.id !== id));
 
-            // 過濾邏輯
+            // 過濾邏輯支援單選(字串)與複選(陣列)
             const generateFilteredDb = (currentScenario, genderCondition) => {
                 if (!dbData) return null;
                 const scenarioKeywords = {
-                    trekking: ['健行'], island: ['環島'], hiking: ['行腳'],
-                    baiyue: ['百岳'], winter: ['冬季']
+                    trekking: ['健行'], baiyue: ['百岳'], hiking: ['徒步'],
+                    island: ['環島'], winter: ['冬季']
                 };
 
                 let newDb = {};
@@ -393,7 +400,6 @@
                         let gMatch = false;
                         const gText = (i.gender || '');
                         if (Array.isArray(genderCondition)) {
-                            // 陣列模式 (型錄複選使用)
                             if (genderCondition.length === 3) gMatch = true;
                             else {
                                 if (genderCondition.includes('kids') && (gText.includes('兒童') || gText.includes('童'))) gMatch = true;
@@ -401,7 +407,6 @@
                                 if (genderCondition.includes('women') && (gText.includes('女') || gText.includes('中性'))) gMatch = true;
                             }
                         } else {
-                            // 單一字串模式 (拉霸機單選使用)
                             if (genderCondition === 'all') gMatch = true;
                             else if (genderCondition === 'kids' && (gText.includes('兒童') || gText.includes('童'))) gMatch = true;
                             else if (genderCondition === 'men' && (gText.includes('男') || gText.includes('中性'))) gMatch = true;
@@ -410,7 +415,6 @@
                         return sMatch && gMatch;
                     });
 
-                    // 寬鬆防呆 1
                     if (items.length === 0) {
                         items = dbData[cat].filter(i => {
                             let gMatch = false;
@@ -431,12 +435,10 @@
                             return gMatch;
                         });
                     }
-                    // 寬鬆防呆 2
                     if (items.length === 0) items = dbData[cat]; 
                     newDb[cat] = items;
                 });
 
-                // 注入鎖定商品
                 presetItems.forEach(preset => {
                     const customItem = {
                         id: preset.id, name: preset.name, price: preset.type === 'owned' ? 0 : preset.realPrice, 
@@ -543,7 +545,6 @@
                 
                 categoryOrder.forEach(cat => {
                     const selectedItem = filteredDb[cat] ? filteredDb[cat][currentSelections[cat]] : null;
-                    
                     if (selectedItem) {
                         if (currentLocks[cat]) {
                             const existingIdx = newDb[cat].findIndex(i => i.id === selectedItem.id);
@@ -569,28 +570,26 @@
                 setView('slot');
             };
 
-            const openCatalog = () => {
+            // 💡 Nav 專用的總型錄開啟邏輯 (保證看到所有商品)
+            const openCatalogFromNav = () => {
                 setView('catalog_loading');
-                let initialGenders = ['men', 'women', 'kids'];
-                if (targetGender !== 'all') initialGenders = [targetGender];
                 
-                setCatalogGenders(initialGenders);
-                setTempGenders(initialGenders);
+                setCatalogGenders(['men', 'women', 'kids']);
+                setTempGenders(['men', 'women', 'kids']);
+                setCatalogScenario('all'); // Nav 預設通用行程
+                setTempScenario('all');
                 
-                const tempDb = generateFilteredDb(scenario, initialGenders);
+                const tempDb = generateFilteredDb('all', ['men', 'women', 'kids']);
                 const urlsToLoad = [];
                 if (tempDb) {
                     categoryOrder.forEach(cat => {
-                        tempDb[cat].forEach(item => {
-                            if (item.img) urlsToLoad.push(item.img);
-                        });
+                        tempDb[cat].forEach(item => { if (item.img) urlsToLoad.push(item.img); });
                     });
                 }
 
                 const loadImage = (url) => new Promise((resolve) => {
                     const img = new Image();
-                    img.onload = () => resolve();
-                    img.onerror = () => resolve(); 
+                    img.onload = img.onerror = () => resolve(); 
                     img.src = url;
                 });
 
@@ -599,8 +598,41 @@
                 const loadAllPromise = Promise.all(urlsToLoad.map(loadImage));
 
                 Promise.race([
-                    Promise.all([loadAllPromise, minTimePromise]), 
-                    maxTimePromise
+                    Promise.all([loadAllPromise, minTimePromise]), maxTimePromise
+                ]).then(() => {
+                    setCatalogActiveTab('all');
+                    setFilteredDb(tempDb); 
+                    setView('catalog');
+                });
+            };
+
+            // 原本由拉霸機開啟的型錄邏輯 (繼承當前條件)
+            const openCatalog = () => {
+                setView('catalog_loading');
+                let initialGenders = ['men', 'women', 'kids'];
+                if (targetGender !== 'all') initialGenders = [targetGender];
+                
+                setCatalogGenders(initialGenders);
+                setTempGenders(initialGenders);
+                setCatalogScenario(scenario); // 繼承拉霸機的行程
+                setTempScenario(scenario);
+                
+                const tempDb = generateFilteredDb(scenario, initialGenders);
+                const urlsToLoad = [];
+                if (tempDb) {
+                    categoryOrder.forEach(cat => {
+                        tempDb[cat].forEach(item => { if (item.img) urlsToLoad.push(item.img); });
+                    });
+                }
+
+                const loadImage = (url) => new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = img.onerror = () => resolve(); 
+                    img.src = url;
+                });
+
+                Promise.race([
+                    Promise.all([urlsToLoad.map(loadImage)]), new Promise(resolve => setTimeout(resolve, 600))
                 ]).then(() => {
                     setCatalogActiveTab('all');
                     setFilteredDb(tempDb); 
@@ -613,13 +645,12 @@
                     showMsg("請至少選擇一個裝備對象！");
                     return;
                 }
-                
                 setIsFilterModalOpen(false);
                 setView('catalog_loading');
-                
                 setTimeout(() => {
                     setCatalogGenders(tempGenders);
-                    const newDb = generateFilteredDb(scenario, tempGenders); 
+                    setCatalogScenario(tempScenario); // 應用新的行程設定
+                    const newDb = generateFilteredDb(tempScenario, tempGenders); 
                     setFilteredDb(newDb);
                     
                     setSelections(prev => {
@@ -642,13 +673,26 @@
                 return null; 
             };
 
+            // --- 底部 App 導覽列組件 ---
+            const BottomNav = () => (
+                <div className="bg-white border-t border-gray-200 flex justify-around items-center pb-2 pt-1 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] flex-shrink-0 z-50">
+                    <button onClick={() => setView('magazine')} className={`flex-1 py-2 flex flex-col items-center transition-colors ${view === 'magazine' ? 'text-blue-600' : 'text-gray-400 hover:text-blue-400'}`}>
+                        <BookOpenIcon /> <span className="text-[10px] mt-1 font-bold">靈感誌</span>
+                    </button>
+                    <button onClick={() => setView('setup')} className={`flex-1 py-2 flex flex-col items-center transition-colors ${view === 'setup' ? 'text-blue-600' : 'text-gray-400 hover:text-blue-400'}`}>
+                        <DicesIcon /> <span className="text-[10px] mt-1 font-bold">拉霸機</span>
+                    </button>
+                    <button onClick={openCatalogFromNav} className={`flex-1 py-2 flex flex-col items-center transition-colors ${view === 'catalog' ? 'text-blue-600' : 'text-gray-400 hover:text-blue-400'}`}>
+                        <GridIcon /> <span className="text-[10px] mt-1 font-bold">總型錄</span>
+                    </button>
+                </div>
+            );
+
             // 防呆畫面
             if (dbFatalError) {
                 return (
                     <div className="h-[100dvh] flex flex-col items-center justify-center bg-gray-50 p-6 text-center">
-                        <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-5 shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                        </div>
+                        <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-5 shadow-sm"><XIcon /></div>
                         <h2 className="text-xl font-black text-gray-800 mb-3 tracking-widest">無法讀取產品資料庫！</h2>
                         <p className="text-sm font-bold text-gray-500 leading-relaxed">請洽詢商場服務人員，<br/>服務人員將為您提供協助！</p>
                     </div>
@@ -669,53 +713,46 @@
                 return (
                     <div className="h-[100dvh] bg-gray-50 flex justify-center overflow-hidden relative">
                         <div className="w-full max-w-md bg-white h-full shadow-2xl relative flex flex-col">
-                            {/* 雜誌 Header */}
-                            <div className="bg-white px-4 py-3 shadow-sm z-20 flex-shrink-0 flex justify-between items-center border-b border-gray-200">
-                                <div className="text-center w-full">
-                                    <h1 className="text-sm font-black text-gray-800 tracking-widest uppercase">三重店凹逗穿搭靈感誌</h1>
-                                    <p className="text-[10px] text-blue-600 font-bold mt-0.5 tracking-widest">OUTDOOR LOOKBOOK</p>
+                            
+                            {/* 💡 統一 Header 1：靈感誌 */}
+                            <div className="bg-white h-16 px-4 shadow-sm z-20 flex-shrink-0 flex justify-between items-center border-b border-gray-200">
+                                <div className="w-10 flex justify-start"></div>
+                                <div className="flex-1 text-center flex flex-col justify-center">
+                                    <h1 className="text-sm font-black text-gray-800 tracking-widest uppercase leading-none">三重店凹逗穿搭靈感誌</h1>
+                                    <p className="text-[10px] text-blue-600 font-bold mt-1 tracking-widest">OUTDOOR LOOKBOOK</p>
                                 </div>
+                                <div className="w-10 flex justify-end"></div>
                             </div>
 
-                            {/* 雜誌內容 (移除了 pt-4 消除頂部奇怪的空白) */}
-                            <div className="flex-1 overflow-y-auto no-scrollbar pb-10">
+                            <div className="flex-1 overflow-y-auto no-scrollbar pb-6">
                                 {lookbookData.length > 0 ? lookbookData.map(look => (
                                     <div key={look.id} className="mb-8 bg-white border-b border-gray-100 pb-8">
-                                        
-                                        {/* 真人模特大圖 (維持 A4 比例) */}
                                         <div className="w-full aspect-[1/1.414] bg-gray-100 relative overflow-hidden">
                                             <img src={look.coverImg} alt={look.title} className="w-full h-full object-cover" />
-                                            
-                                            {/* 標題：覆蓋在圖片上方 */}
                                             <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-black/60 to-transparent p-5 pt-6">
                                                 <h2 className="text-2xl font-black text-white tracking-wide drop-shadow-lg">{look.title}</h2>
                                             </div>
-                                            
-                                            {/* 敘述：維持在圖片下方 */}
                                             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5">
                                                 <p className="text-sm text-white font-medium leading-relaxed drop-shadow-md">{look.desc}</p>
                                             </div>
                                         </div>
 
-                                        {/* 橫向商品捲動列表 */}
                                         <div className="mt-5 pl-4">
                                             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">此穿搭包含以下商品：</h3>
                                             <div className="flex space-x-3 overflow-x-auto no-scrollbar pb-2 pr-4 snap-x">
                                                 {look.productIds.map(productId => {
                                                     const itemInfo = getProductInfo(productId);
                                                     if (!itemInfo) return null; 
-                                                    
                                                     return (
                                                         <div key={productId} className="flex-shrink-0 w-32 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col snap-start">
-                                                            {/* 雜誌小卡圖片 (強制使用 aspect-square 完美正方形，且維持 100% 大小) */}
                                                             <div className="w-full aspect-square bg-gray-50 relative flex items-center justify-center overflow-hidden">
                                                                 <img src={itemInfo.img} className="w-[100%] h-[100%] object-contain mix-blend-multiply" onError={(e) => { e.target.src = 'https://placehold.co/400x400/eeeeee/999999?text=無圖片'; }} />
                                                             </div>
                                                             <div className="p-2.5 flex flex-col flex-1 border-t border-gray-50">
                                                                 <h4 className="text-[11px] font-bold text-gray-800 line-clamp-2 leading-snug mb-0.5">{itemInfo.name}</h4>
                                                                 <p className="text-[9px] text-gray-400 font-mono mb-1">{itemInfo.id}</p>
-                                                                <div className="mt-auto pt-2">
-                                                                    <p className="text-[13px] font-black text-gray-900 font-sans tracking-tighter mb-2">${itemInfo.price}</p>
+                                                                <div className="mt-auto pt-2 flex flex-col space-y-1.5">
+                                                                    <p className="text-[13px] font-black text-gray-900 font-sans tracking-tighter">${itemInfo.price}</p>
                                                                     <a href={`https://www.decathlon.tw/${itemInfo.id}/1769`} target="_blank" rel="noopener noreferrer" className="block text-center text-[10px] bg-gray-100 text-gray-600 hover:bg-blue-600 hover:text-white py-1.5 rounded-md font-bold transition-colors">
                                                                         查看商品詳情
                                                                     </a>
@@ -729,12 +766,10 @@
                                     </div>
                                 )) : (
                                     <div className="text-center py-20 text-gray-400 font-bold">
-                                        <div className="text-4xl mb-3">📭</div>
-                                        目前沒有精選穿搭
+                                        <div className="text-4xl mb-3">📭</div>目前沒有精選穿搭
                                     </div>
                                 )}
 
-                                {/* 底部引導區塊 CTA */}
                                 <div className="px-6 pt-4 pb-8 text-center bg-gray-50 m-4 rounded-3xl border border-gray-200">
                                     <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
                                         <DicesIcon />
@@ -747,12 +782,12 @@
                                     </button>
                                 </div>
                                 
-                                {/* 頁尾更新日期提示 */}
                                 <div className="mt-2 mb-6 text-[10px] text-gray-400 text-center leading-relaxed">
-                                    此頁推薦內容僅供參考，實際商品與價格以現場為準。<br/>
-                                    最後更新日期：{updateDate}
+                                    此頁推薦內容僅供參考，實際商品與價格以現場為準。<br/>最後更新日期：{updateDate}
                                 </div>
                             </div>
+
+                            <BottomNav />
                         </div>
                     </div>
                 );
@@ -764,28 +799,26 @@
                     <div className="h-[100dvh] bg-gray-50 flex justify-center overflow-hidden relative">
                         {toast && <div className="fixed top-14 left-1/2 transform -translate-x-1/2 z-50 toast-enter bg-gray-900 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-xl">{toast}</div>}
 
-                        <div className="w-full max-w-md bg-gray-50 h-full shadow-2xl relative flex flex-col">
-                            <div className="bg-white px-3 py-2 shadow-sm z-20 flex-shrink-0 flex justify-between items-center border-b border-gray-200">
-                                <button onClick={() => setView('magazine')} className="p-1.5 -ml-1 rounded-full text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors" title="回到靈感誌">
-                                    <ArrowLeftIcon />
-                                </button>
-                                <div className="text-center">
-                                    <h1 className="text-xs font-black text-gray-800 tracking-widest uppercase">登山健行裝備拉霸機</h1>
-                                    <p className="text-[8px] text-blue-600 font-bold mt-0.5 tracking-widest">你的凹逗穿搭好幫手</p>
+                        <div className="w-full max-w-md bg-white h-full shadow-2xl relative flex flex-col">
+                            
+                            {/* 💡 統一 Header 2：設定頁 */}
+                            <div className="bg-white h-16 px-4 shadow-sm z-20 flex-shrink-0 flex justify-between items-center border-b border-gray-200">
+                                <div className="w-10 flex justify-start"></div>
+                                <div className="flex-1 text-center flex flex-col justify-center">
+                                    <h1 className="text-sm font-black text-gray-800 tracking-widest uppercase leading-none">登山健行裝備拉霸機</h1>
+                                    <p className="text-[10px] text-blue-600 font-bold mt-1 tracking-widest">你的凹逗穿搭好幫手</p>
                                 </div>
-                                <div className="w-8"></div>
+                                <div className="w-10 flex justify-end"></div>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-3 pb-32">
+                            <div className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-3 pb-6">
                                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                                     <h2 className="text-[11px] font-bold text-gray-800 mb-2 flex justify-between items-end">
                                         <span className="flex items-center"><span className="w-1 h-2.5 bg-blue-600 rounded-full mr-1.5"></span>新購裝備預算</span>
                                         <span className="text-blue-600 font-sans font-black text-sm">${budget}</span>
                                     </h2>
                                     <input type="range" min="500" max="10000" step="100" value={budget} onChange={(e) => setBudget(Number(e.target.value))} className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" />
-                                    <div className="flex justify-between text-[9px] text-gray-400 mt-1.5 font-sans">
-                                        <span>$500</span><span>$10,000</span>
-                                    </div>
+                                    <div className="flex justify-between text-[9px] text-gray-400 mt-1.5 font-sans"><span>$500</span><span>$10,000</span></div>
                                 </div>
 
                                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
@@ -805,10 +838,19 @@
                                     <div className="flex flex-wrap gap-1.5">
                                         <ToggleBtn className="flex-1 min-w-[28%]" active={scenario === 'all'} onClick={() => setScenario('all')}><span className="text-[12px]">🌍</span>&nbsp;通用</ToggleBtn>
                                         <ToggleBtn className="flex-1 min-w-[28%]" active={scenario === 'trekking'} onClick={() => setScenario('trekking')}><span className="text-[12px]">🥾</span>&nbsp;健行</ToggleBtn>
-                                        <ToggleBtn className="flex-1 min-w-[28%]" active={scenario === 'island'} onClick={() => setScenario('island')}><span className="text-[12px]">🧳</span>&nbsp;環島</ToggleBtn>
-                                        <ToggleBtn className="flex-1 min-w-[28%]" active={scenario === 'hiking'} onClick={() => setScenario('hiking')}><span className="text-[12px]">🚶</span>&nbsp;行腳</ToggleBtn>
                                         <ToggleBtn className="flex-1 min-w-[28%]" active={scenario === 'baiyue'} onClick={() => setScenario('baiyue')}><span className="text-[12px]">⛰️</span>&nbsp;百岳</ToggleBtn>
+                                        <ToggleBtn className="flex-1 min-w-[28%]" active={scenario === 'hiking'} onClick={() => setScenario('hiking')}><span className="text-[12px]">🚶</span>&nbsp;徒步</ToggleBtn>
+                                        <ToggleBtn className="flex-1 min-w-[28%]" active={scenario === 'island'} onClick={() => setScenario('island')}><span className="text-[12px]">🧳</span>&nbsp;環島</ToggleBtn>
                                         <ToggleBtn className="flex-1 min-w-[28%]" active={scenario === 'winter'} onClick={() => setScenario('winter')}><span className="text-[12px]">❄️</span>&nbsp;冬季</ToggleBtn>
+                                    </div>
+                                    
+                                    <div className="mt-3 bg-blue-50/70 border border-blue-100 rounded-xl p-3 shadow-inner">
+                                        <h3 className="text-[11px] font-bold text-blue-800 mb-1 flex items-center">
+                                            <span className="mr-1">💡</span> {scenarioTips[scenario].title}
+                                        </h3>
+                                        <p className="text-[10px] text-blue-700 leading-relaxed font-medium whitespace-pre-line">
+                                            {scenarioTips[scenario].text}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -849,20 +891,19 @@
                                     </div>
                                 </div>
                                 
-                                <div className="mt-4 text-[10px] text-gray-400 text-center leading-relaxed">
-                                    此頁推薦內容僅供參考，實際商品與價格以現場為準。<br/>
-                                    最後更新日期：{updateDate}
+                                <div className="py-2 text-[10px] text-gray-400 text-center leading-relaxed">
+                                    此頁推薦內容僅供參考，實際商品與價格以現場為準。<br/>最後更新日期：{updateDate}
                                 </div>
                             </div>
 
-                            <div className="bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] rounded-t-2xl z-20 flex-shrink-0">
-                                <div className="px-3 pt-3 pb-3 flex space-x-2">
-                                    <button onClick={goToSlot} className="flex-1 flex items-center justify-center space-x-1.5 py-3 rounded-xl text-xs font-black tracking-widest text-white shadow-md transition-all transform active:scale-95 uppercase bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                                        <span>完成設定，進入拉霸機</span>
-                                        <ChevronRightIcon />
-                                    </button>
-                                </div>
+                            <div className="px-4 py-3 bg-white border-t border-gray-100 z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.02)]">
+                                <button onClick={goToSlot} className="w-full flex items-center justify-center space-x-1.5 py-3.5 rounded-xl text-xs font-black tracking-widest text-white shadow-md transition-all transform active:scale-95 uppercase bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                                    <span>完成設定，進入拉霸機</span>
+                                    <ChevronRightIcon />
+                                </button>
                             </div>
+
+                            <BottomNav />
                         </div>
                     </div>
                 );
@@ -888,12 +929,11 @@
                     <div className="h-[100dvh] bg-gray-50 flex justify-center overflow-hidden relative">
                         {toast && <div className="fixed top-14 left-1/2 transform -translate-x-1/2 z-50 toast-enter bg-gray-900 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-xl">{toast}</div>}
                         
-                        {/* 💡 修正：在外層容器加上 overflow-hidden，並把 Modal 真正放進手機框內 */}
                         <div className="w-full max-w-md bg-gray-50 h-full shadow-2xl relative flex flex-col overflow-hidden">
                             
                             {/* 彈出式篩選視窗 Modal */}
                             {isFilterModalOpen && (
-                                <div className="absolute inset-0 z-[100] flex flex-col justify-end bg-black/60 backdrop-blur-[2px] transition-all">
+                                <div className="absolute inset-0 z-[100] flex flex-col justify-end bg-black/60 backdrop-blur-[2px] transition-all overflow-hidden">
                                     <div className="w-full bg-white rounded-t-3xl p-5 shadow-2xl modal-enter max-h-[85vh] flex flex-col">
                                         <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-3 flex-shrink-0">
                                             <h3 className="text-sm font-black text-gray-800 flex items-center">
@@ -903,31 +943,35 @@
                                         </div>
                                         
                                         <div className="mb-6 overflow-y-auto no-scrollbar">
-                                            <label className="text-xs font-bold text-gray-500 mb-3 block">裝備對象（可複選）</label>
-                                            
-                                            {/* 移除混合選項，改為 3 等分的網格排版 */}
-                                            <div className="grid grid-cols-3 gap-2">
-                                                <button 
-                                                    onClick={() => {
+                                            <div className="mb-5">
+                                                <label className="text-xs font-bold text-gray-500 mb-3 block">裝備對象 (三格全亮即為全選)</label>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <button onClick={() => {
                                                         if(tempGenders.includes('men') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'men'));
                                                         else if(!tempGenders.includes('men')) setTempGenders([...tempGenders, 'men']);
-                                                    }}
-                                                    className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('men') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
-                                                >👦 男款</button>
-                                                <button 
-                                                    onClick={() => {
+                                                    }} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('men') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}>👦 男款</button>
+                                                    <button onClick={() => {
                                                         if(tempGenders.includes('women') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'women'));
                                                         else if(!tempGenders.includes('women')) setTempGenders([...tempGenders, 'women']);
-                                                    }}
-                                                    className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('women') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
-                                                >👧 女款</button>
-                                                <button 
-                                                    onClick={() => {
+                                                    }} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('women') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}>👧 女款</button>
+                                                    <button onClick={() => {
                                                         if(tempGenders.includes('kids') && tempGenders.length > 1) setTempGenders(tempGenders.filter(g => g !== 'kids'));
                                                         else if(!tempGenders.includes('kids')) setTempGenders([...tempGenders, 'kids']);
-                                                    }}
-                                                    className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('kids') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}
-                                                >👶 兒童</button>
+                                                    }} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all ${tempGenders.includes('kids') ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}>👶 兒童</button>
+                                                </div>
+                                            </div>
+
+                                            {/* 💡 新增：型錄過濾器的行程情境選擇 */}
+                                            <div>
+                                                <label className="text-xs font-bold text-gray-500 mb-3 block">行程情境</label>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <button onClick={() => setTempScenario('all')} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all flex items-center justify-center space-x-1 ${tempScenario === 'all' ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}><span>🌍</span><span>通用</span></button>
+                                                    <button onClick={() => setTempScenario('trekking')} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all flex items-center justify-center space-x-1 ${tempScenario === 'trekking' ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}><span>🥾</span><span>健行</span></button>
+                                                    <button onClick={() => setTempScenario('baiyue')} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all flex items-center justify-center space-x-1 ${tempScenario === 'baiyue' ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}><span>⛰️</span><span>百岳</span></button>
+                                                    <button onClick={() => setTempScenario('hiking')} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all flex items-center justify-center space-x-1 ${tempScenario === 'hiking' ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}><span>🚶</span><span>徒步</span></button>
+                                                    <button onClick={() => setTempScenario('island')} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all flex items-center justify-center space-x-1 ${tempScenario === 'island' ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}><span>🧳</span><span>環島</span></button>
+                                                    <button onClick={() => setTempScenario('winter')} className={`py-3 rounded-xl text-xs font-bold border-2 transition-all flex items-center justify-center space-x-1 ${tempScenario === 'winter' ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 text-gray-500 hover:border-blue-300'}`}><span>❄️</span><span>冬季</span></button>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -938,41 +982,30 @@
                                 </div>
                             )}
 
-                            {/* Header 包含篩選按鈕 */}
+                            {/* 💡 統一 Header 3：總型錄 */}
                             <div className="bg-white shadow-sm z-20 flex-shrink-0 border-b border-gray-200">
-                                <div className="px-3 py-2 flex justify-between items-center">
-                                    <button onClick={() => returnToSlot()} className="p-1.5 -ml-1 rounded-full text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors" title="回到拉霸機">
-                                        <ArrowLeftIcon />
-                                    </button>
-                                    <div className="text-center w-full">
-                                        <h1 className="text-xs font-black text-gray-800 tracking-widest uppercase">裝備型錄</h1>
-                                        <p className="text-[8px] text-blue-600 font-bold mt-0.5 tracking-widest">
-                                            {/* 當 3 個選項都選取時，顯示「全部對象」 */}
-                                            {catalogGenders.length === 3 ? '全部對象' : catalogGenders.map(g => g === 'men' ? '男' : g === 'women' ? '女' : '兒童').join(' / ')}
+                                <div className="h-16 px-4 flex justify-between items-center">
+                                    <div className="w-10 flex justify-start"></div>
+                                    <div className="flex-1 text-center flex flex-col justify-center">
+                                        <h1 className="text-sm font-black text-gray-800 tracking-widest uppercase leading-none">全品項裝備型錄</h1>
+                                        <p className="text-[10px] text-blue-600 font-bold mt-1 tracking-widest">
+                                            {catalogScenario === 'all' ? '通用' : catalogScenario === 'trekking' ? '健行' : catalogScenario === 'baiyue' ? '百岳' : catalogScenario === 'hiking' ? '徒步' : catalogScenario === 'island' ? '環島' : '冬季'} | {catalogGenders.length === 3 ? '全部對象' : catalogGenders.map(g => g === 'men' ? '男' : g === 'women' ? '女' : '兒童').join('/')}
                                         </p>
                                     </div>
-                                    <button 
-                                        onClick={() => { setTempGenders(catalogGenders); setIsFilterModalOpen(true); }} 
-                                        className="p-1.5 -mr-1 rounded-full text-gray-500 bg-gray-100 hover:bg-blue-100 hover:text-blue-600 transition-colors" title="進階篩選"
-                                    >
-                                        <FilterIcon />
-                                    </button>
+                                    <div className="w-10 flex justify-end">
+                                        <button onClick={() => { setTempGenders(catalogGenders); setTempScenario(catalogScenario); setIsFilterModalOpen(true); }} className="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 bg-gray-100 hover:bg-blue-100 hover:text-blue-600 transition-colors" title="進階篩選">
+                                            <FilterIcon />
+                                        </button>
+                                    </div>
                                 </div>
 
-                                {/* 分類滑動標籤 */}
-                                <div className="flex overflow-x-auto no-scrollbar px-3 pt-2.5 pb-3 space-x-2">
-                                    <button 
-                                        onClick={() => setCatalogActiveTab('all')}
-                                        className={`flex-shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors border ${catalogActiveTab === 'all' ? 'bg-gray-800 text-white border-gray-800 shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'}`}
-                                    >
+                                {/* 分類標籤 */}
+                                <div className="flex overflow-x-auto no-scrollbar px-3 pt-1 pb-3 space-x-2">
+                                    <button onClick={() => setCatalogActiveTab('all')} className={`flex-shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors border ${catalogActiveTab === 'all' ? 'bg-gray-800 text-white border-gray-800 shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'}`}>
                                         全部裝備
                                     </button>
                                     {categoryOrder.map(cat => (
-                                        <button 
-                                            key={`tab-${cat}`}
-                                            onClick={() => setCatalogActiveTab(cat)}
-                                            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors border ${catalogActiveTab === cat ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'}`}
-                                        >
+                                        <button key={`tab-${cat}`} onClick={() => setCatalogActiveTab(cat)} className={`flex-shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors border ${catalogActiveTab === cat ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'}`}>
                                             {categoryLabels[cat]} <span className="opacity-80 ml-0.5 font-mono text-[9px]">({filteredDb[cat].length})</span>
                                         </button>
                                     ))}
@@ -980,18 +1013,16 @@
                             </div>
 
                             {/* 總覽內容 */}
-                            <div className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-4 pb-10">
+                            <div className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-4 pb-6">
                                 {visibleCategories.map(cat => (
                                     <div key={cat} className="bg-white rounded-xl shadow-sm border border-gray-100 p-3">
                                         <h3 className="text-[11px] font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2 flex items-center">
-                                            <span className="w-1.5 h-3 bg-blue-600 rounded-full mr-1.5"></span>
-                                            {categoryLabels[cat]}
+                                            <span className="w-1.5 h-3 bg-blue-600 rounded-full mr-1.5"></span>{categoryLabels[cat]}
                                         </h3>
                                         <div className="grid grid-cols-2 gap-3">
                                             {filteredDb[cat].map((item, idx) => (
                                                 <div key={item.id} className="flex flex-col border border-gray-100 rounded-xl overflow-hidden relative shadow-sm hover:border-blue-200 transition-colors">
-                                                    {/* 總覽型錄圖片 (調整為 90% 完美比例) */}
-                                                    <div className="aspect-square bg-gray-50 relative flex items-center justify-center overflow-hidden">
+                                                    <div className="w-full aspect-square bg-gray-50 relative flex items-center justify-center overflow-hidden">
                                                         <img src={item.img} alt={item.name} className="w-[100%] h-[100%] object-contain mix-blend-multiply" onError={(e) => { e.target.src = 'https://placehold.co/400x400/eeeeee/999999?text=無圖片'; }} />
                                                         {item.isOwned && <div className="absolute inset-0 bg-gray-900/50 flex items-center justify-center text-white text-[10px] font-bold backdrop-blur-[1px]">✅ 已擁有</div>}
                                                         {item.isCart && <div className="absolute inset-0 bg-amber-900/30 flex items-center justify-center text-white text-[10px] font-bold backdrop-blur-[1px]">🛒 購物車</div>}
@@ -1010,7 +1041,7 @@
                                                             }}
                                                             className="w-full py-2 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white text-[10px] font-bold rounded-lg transition-colors flex justify-center items-center"
                                                         >
-                                                            鎖定此裝備
+                                                            帶入拉霸機
                                                         </button>
                                                     </div>
                                                 </div>
@@ -1019,12 +1050,12 @@
                                     </div>
                                 ))}
 
-                                {/* 頁尾更新日期提示 */}
                                 <div className="pt-4 pb-6 text-[10px] text-gray-400 text-center leading-relaxed">
-                                    此頁推薦內容僅供參考，實際商品與價格以現場為準。<br/>
-                                    最後更新日期：{updateDate}
+                                    此頁推薦內容僅供參考，實際商品與價格以現場為準。<br/>最後更新日期：{updateDate}
                                 </div>
                             </div>
+
+                            <BottomNav />
                         </div>
                     </div>
                 );
@@ -1035,26 +1066,30 @@
             const ownedCount = presetItems.filter(i => i.type === 'owned').length;
 
             return (
-                <div className="h-[100dvh] bg-gray-50 flex justify-center overflow-hidden">
+                <div className="h-[100dvh] bg-gray-50 flex justify-center overflow-hidden relative">
                     {toast && <div className="fixed top-14 left-1/2 transform -translate-x-1/2 z-50 toast-enter bg-gray-900 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-xl">{toast}</div>}
-
+                    
                     <div className="w-full max-w-md bg-gray-50 h-full shadow-2xl relative flex flex-col">
                         
-                        {/* 頂部 Header */}
-                        <div className="bg-white px-3 py-2 shadow-sm z-20 flex-shrink-0 flex justify-between items-center border-b border-gray-200">
-                            <button onClick={() => setView('setup')} className="p-1.5 -ml-1 rounded-full text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors" title="回到設定">
-                                <ArrowLeftIcon />
-                            </button>
-                            <div className="text-center">
-                                <h1 className="text-xs font-black text-gray-800 tracking-widest uppercase">登山健行裝備拉霸機</h1>
-                                <p className="text-[8px] text-blue-600 font-bold mt-0.5">
+                        {/* 💡 統一 Header 4：拉霸機 */}
+                        <div className="bg-white h-16 px-4 shadow-sm z-20 flex-shrink-0 flex justify-between items-center border-b border-gray-200">
+                            <div className="w-10 flex justify-start">
+                                <button onClick={() => setView('setup')} className="w-8 h-8 flex items-center justify-center rounded-full text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors" title="回到設定">
+                                    <ArrowLeftIcon />
+                                </button>
+                            </div>
+                            <div className="flex-1 text-center flex flex-col justify-center">
+                                <h1 className="text-sm font-black text-gray-800 tracking-widest uppercase leading-none">登山健行裝備拉霸機</h1>
+                                <p className="text-[9px] text-blue-600 font-bold mt-1 tracking-widest whitespace-nowrap">
                                     ${budget} | {targetGender==='all'?'不拘':targetGender==='men'?'男':targetGender==='women'?'女':'童'} | { } 
-                                    {scenario==='all'?'通用':scenario==='trekking'?'健行':scenario==='island'?'環島':scenario==='hiking'?'行腳':scenario==='baiyue'?'百岳':'冬季'}
+                                    {scenario==='all'?'通用':scenario==='trekking'?'健行':scenario==='baiyue'?'百岳':scenario==='hiking'?'徒步':scenario==='island'?'環島':'冬季'}
                                 </p>
                             </div>
-                            <button onClick={openCatalog} className="p-1.5 -mr-1 rounded-full text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors" title="裝備總覽">
-                                <ListIcon />
-                            </button>
+                            <div className="w-10 flex justify-end">
+                                <button onClick={openCatalog} className="w-8 h-8 flex items-center justify-center rounded-full text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors" title="裝備總覽">
+                                    <ListIcon />
+                                </button>
+                            </div>
                         </div>
 
                         <div className="flex-1 flex flex-col justify-center p-2.5 gap-2 overflow-hidden z-10">
@@ -1069,8 +1104,7 @@
                             ))}
                         </div>
 
-                        {/* 底部控制列 */}
-                        <div className="bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] rounded-t-2xl z-20 flex-shrink-0">
+                        <div className="bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] rounded-t-2xl z-20 flex-shrink-0 pb-safe">
                             <div className="px-4 pt-3 pb-2 flex justify-between items-end">
                                 <div className="flex flex-col">
                                     <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">目前搭配總金額</span>
@@ -1097,6 +1131,8 @@
                                 </button>
                             </div>
                         </div>
+                        
+                        <BottomNav />
                     </div>
                 </div>
             );
