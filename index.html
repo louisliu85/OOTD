@@ -613,7 +613,7 @@
                             <div className="flex-1 overflow-y-auto no-scrollbar pb-6">
                                 {lookbookData.length > 0 ? lookbookData.map(look => (
                                     <div key={look.id} className="mb-8 bg-white border-b border-gray-100 pb-8">
-                                        <div className="w-full aspect-[1/1.414] bg-gray-100 relative overflow-hidden">
+                                        <div className="w-full aspect-[3/4] bg-gray-100 relative overflow-hidden">
                                             <img src={look.coverImg} alt={look.title} className="w-full h-full object-cover" />
                                             <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-black/60 to-transparent p-5 pt-6">
                                                 <h2 className="text-2xl font-black text-white tracking-wide drop-shadow-lg">{look.title}</h2>
